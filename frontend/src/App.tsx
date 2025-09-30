@@ -1,0 +1,75 @@
+import React from "react";
+import { Toaster } from "@/components/ui/toaster";
+import { Toaster as Sonner } from "@/components/ui/sonner";
+import { TooltipProvider } from "@/components/ui/tooltip";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import Index from "./pages/Index";
+import ProjectDetail from "./pages/ProjectDetail";
+import Apartments from "./pages/Apartments";
+import PropertyDetail from "./pages/PropertyDetail";
+import Villas from "./pages/Villas";
+import OtherProperties from "./pages/OtherProperties";
+import NotFound from "./pages/NotFound";
+
+const queryClient = new QueryClient();
+
+const App = () => (
+  <QueryClientProvider client={queryClient}>
+    <TooltipProvider>
+      <Toaster />
+      <Sonner />
+      <BrowserRouter>
+        <Routes>
+          <Route path="/" element={<Index />} />
+          <Route path="/new-project/:title/:id" element={<ProjectDetail />} />
+          <Route path="/apartment" element={<Apartments />} />
+
+          <Route path="/apartments/:state" element={<Apartments />} />
+          <Route path="/villas/:state" element={<Villas />} />
+          <Route
+            path="/other-properties/:state"
+            element={<OtherProperties />}
+          />
+          
+
+          <Route
+            path="/apartments-in-dubai/:title/:id"
+            element={<PropertyDetail />}
+          />
+          <Route
+            path="/villas-in-dubai/:title/:id"
+            element={<PropertyDetail />}
+          />
+          <Route
+            path="/other-properties/:title/:id"
+            element={<PropertyDetail />}
+          />
+          <Route
+            path="/other-properties/:title/:id"
+            element={<PropertyDetail />}
+          />
+
+          <Route
+            path="/apartments-in-dubai/:title/:id"
+            element={<PropertyDetail />}
+          />
+          {/* <Route path="/apartments-in-dubai/:slug/:id" element={<PropertyDetail />} /> */}
+
+          <Route path="/villas-in-dubai/:title/:id" element={<Villas />} />
+          <Route path="/land" element={<OtherProperties />} />
+          <Route path="/building" element={<OtherProperties />} />
+          <Route path="/floor" element={<OtherProperties />} />
+          {/* Legacy routes for backwards compatibility */}
+          <Route path="/apartments-in-dubai" element={<Apartments />} />
+          <Route path="/villas-in-dubai" element={<Villas />} />
+          <Route path="/other-properties" element={<OtherProperties />} />
+          {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
+          <Route path="*" element={<NotFound />} />
+        </Routes>
+      </BrowserRouter>
+    </TooltipProvider>
+  </QueryClientProvider>
+);
+
+export default App;
