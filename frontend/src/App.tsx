@@ -11,6 +11,7 @@ import PropertyDetail from "./pages/PropertyDetail";
 import Villas from "./pages/Villas";
 import OtherProperties from "./pages/OtherProperties";
 import AgencyDashboard from "./pages/AgencyDashboard";
+import Auth from './pages/Auth'
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -69,7 +70,9 @@ const App = () => (
 
           {/* Dashboards */}
           <Route path="/agency/dashboard" element={<AgencyDashboard />} />
-          
+
+          {/* Auth */}
+          <Route path="/auth" element={<Auth />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>

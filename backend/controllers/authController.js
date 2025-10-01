@@ -5,7 +5,8 @@ const User = require("../models/User");
 // Register
 exports.register = async (req, res) => {
   try {
-    const { username, email, password } = req.body;
+    const { name, email, password, role } = req.body;
+    console.log('Registering user:', { name, email, role });
 
     // check if user already exists
     const existing = await User.findOne({ email });
@@ -16,10 +17,10 @@ exports.register = async (req, res) => {
     const hashed = await bcrypt.hash(password, salt);
 
     // save user
-    const newUser = new User({ username, email, password: hashed });
+    const newUser = new User({ name, email, password: hashed, role });
     await newUser.save();
 
-    res.status(201).json({ msg: "User registered successfully" });
+    res.status(201).json({ msg: "User registered successfully", success: true });
   } catch (err) {
     res.status(500).json({ msg: "Server error", error: err.message });
   }
@@ -32,11 +33,11 @@ exports.login = async (req, res) => {
 
     // find user
     const user = await User.findOne({ email });
-    if (!user) return res.status(400).json({ msg: "Invalid credentials" });
+    if (!user) return res.status(400).json({ msg: "User not found!" });
 
     // compare password
     const isMatch = await bcrypt.compare(password, user.password);
-    if (!isMatch) return res.status(400).json({ msg: "Invalid credentials" });
+    if (!isMatch) return res.status(400).json({ msg: "Invalid password!" });
 
     // create token
     const token = jwt.sign(
@@ -55,7 +56,8 @@ exports.login = async (req, res) => {
 
     res.json({
       msg: "Login successful",
-      user: { id: user._id, username: user.username, email: user.email }
+      user: { id: user._id, username: user.username, email: user.email },
+      success: true
     });
   } catch (err) {
     res.status(500).json({ msg: "Server error", error: err.message });
@@ -64,8 +66,14 @@ exports.login = async (req, res) => {
 
 // Logout
 exports.logout = (req, res) => {
-  res.clearCookie("token");
-  res.json({ msg: "Logged out successfully" });
+  // res.clearCookie("token");
+  // res.json({ msg: "Logged out successfully" });
+  res.clearCookie("token", {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === "production",
+    sameSite: "strict"
+  });
+  res.json({ success: true, message: "Logged out" });
 };
 
 // Profile (Protected)

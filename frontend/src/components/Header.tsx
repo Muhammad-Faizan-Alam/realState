@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { Search, Menu, X, ChevronDown } from "lucide-react";
+import { useEffect, useState } from "react";
+import { Search, Menu, X, ChevronDown, User2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -17,6 +17,7 @@ import {
 
 const Header = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const [user, setUser] = useState(null);
 
   const navigationItems = [
     { label: "Find my Agent", href: "#" },
@@ -58,6 +59,26 @@ const Header = () => {
     }
   ];
 
+  useEffect(() => {
+    const getProfile = async () => {
+      try {
+        const res = await fetch("http://localhost:5000/api/auth/profile", {
+          method: "GET",
+          credentials: "include", // ✅ cookie sent automatically
+        });
+
+        if (res.ok) {
+          const data = await res.json();
+          setUser(data);
+          console.log(data);
+        }
+      } catch (error) {
+        console.error("Error fetching profile:", error);
+      }
+    }
+    getProfile();
+  }, []);
+
   return (
     <header className="sticky top-0 z-50 w-full bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 border-b shadow-card">
       <div className="container mx-auto px-4">
@@ -92,7 +113,7 @@ const Header = () => {
                     </DropdownMenuContent>
                   </DropdownMenu>
                 ) : (
-                  <a 
+                  <a
                     href={item.href}
                     className="text-sm font-medium hover:text-primary transition-smooth"
                   >
@@ -106,8 +127,60 @@ const Header = () => {
           {/* Search & Mobile Menu */}
           <div className="flex items-center gap-2">
             {/* Global Search */}
-            <Button variant="ghost" size="sm" className="hidden sm:flex">
+            {/* <Button variant="ghost" size="sm" className="hidden sm:flex">
               <Search size={20} />
+            </Button> */}
+            <Button variant="ghost" size="sm" className="hidden sm:flex">
+              {user ? (
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button
+                      variant="ghost"
+                      className="flex items-center gap-1 font-medium hover:text-primary transition-smooth"
+                    >
+                      <User2 size={20} />
+                      {user.name}
+                      <ChevronDown size={16} />
+                    </Button>
+                  </DropdownMenuTrigger>
+
+                  <DropdownMenuContent align="start" className="w-56 shadow-dropdown">
+                    {/* Email display */}
+                    <DropdownMenuItem asChild>
+                      <span className="text-sm text-gray-600">{user.email}</span>
+                    </DropdownMenuItem>
+
+                    {/* Logout */}
+                    <DropdownMenuItem
+                      onClick={async () => {
+                        try {
+                          const res = await fetch("http://localhost:5000/api/auth/logout", {
+                            method: "POST",
+                            credentials: "include", // ✅ send cookies
+                          });
+
+                          if (res.ok) {
+                            setUser(null);
+                            window.location.href = "/"; // Redirect after successful logout
+                          }
+                        } catch (err) {
+                          console.error("Logout failed:", err);
+                        }
+                      }}
+                    >
+                      Logout
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
+              ) : (
+                <a
+                  href="/auth"
+                  className="ml-2 flex items-center gap-1 text-sm font-medium text-foreground hover:text-primary"
+                >
+                  <User2 size={20} />
+                  Login
+                </a>
+              )}
             </Button>
 
             {/* Mobile Menu */}
@@ -153,9 +226,21 @@ const Header = () => {
                       )}
                     </div>
                   ))}
-                  <Button className="mt-4 w-full">
+                  {/* <Button className="mt-4 w-full">
                     <Search size={16} className="mr-2" />
                     Search Properties
+                  </Button> */}
+                  <Button variant="ghost" size="sm" className="hidden sm:flex">
+                    <User2 size={20} />
+                    {user ? (
+                      <span className="ml-2 text-sm font-medium text-foreground">
+                        {user.name || user.email}
+                      </span>
+                    ) : (
+                      <a href="/auth" className="ml-2 text-sm font-medium text-foreground">
+                        Login
+                      </a>
+                    )}
                   </Button>
                 </nav>
               </SheetContent>
