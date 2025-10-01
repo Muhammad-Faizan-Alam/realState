@@ -39,7 +39,14 @@ const Header = () => {
         { label: "New Projects", href: "#" }
       ]
     },
-    { label: "Agent Portal", href: "#" },
+    {
+      label: "Portal",
+      submenu: [
+        { label: "Agent Portal", href: "#" },
+        { label: "Agency Portal", href: "/agency/dashboard" },
+        { label: "Admin Portal", href: "#" },
+      ]
+    },
     {
       label: "Events",
       submenu: [

@@ -65,7 +65,7 @@ const PropertyDetailSchema = new mongoose.Schema({
   regulatoryInfo: {
     permitNo: String,
     zone: String,
-    agency: String,
+    agency: { type: mongoose.Schema.Types.ObjectId, ref: 'Agency' },
     ded: String,
     rera: String,
     brn: String
