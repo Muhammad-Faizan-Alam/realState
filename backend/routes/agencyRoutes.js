@@ -4,8 +4,8 @@ const agencyController = require("../controllers/agencyController");
 
 router.get("/", agencyController.listAgencies);
 router.get("/:id", agencyController.getAgency);
-router.post("/", agencyController.createAgency);
-router.put("/:id", agencyController.updateAgency);
-router.delete("/:id", agencyController.deleteAgency);
+// router.post("/", agencyController.createAgency);
+// router.put("/:id", agencyController.updateAgency);
+// router.delete("/:id", agencyController.deleteAgency);
 
 module.exports = router;

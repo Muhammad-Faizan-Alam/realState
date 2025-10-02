@@ -12,7 +12,8 @@ const PropertyDetailSchema = new mongoose.Schema({
   propertyType: String,
   state: String,
   tags: [String],
-  developer: {type: mongoose.Schema.Types.ObjectId, ref: 'Developer'},
+  // developer: {type: mongoose.Schema.Types.ObjectId, ref: 'Developer'},
+  developer: String,
   isOffPlan: Boolean,
   paymentPlan: String,
   whatsappLink: String,
@@ -33,7 +34,8 @@ const PropertyDetailSchema = new mongoose.Schema({
   },
 
   validatedInfo: {
-    developer: {type: mongoose.Schema.Types.ObjectId, ref: 'Developer'},
+    // developer: {type: mongoose.Schema.Types.ObjectId, ref: 'Developer'},
+    developer: String,
     ownership: String,
     buildUpArea: String,
     usage: String,
@@ -65,7 +67,7 @@ const PropertyDetailSchema = new mongoose.Schema({
   regulatoryInfo: {
     permitNo: String,
     zone: String,
-    agency: { type: mongoose.Schema.Types.ObjectId, ref: 'Agency' },
+    agency: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
     ded: String,
     rera: String,
     brn: String
