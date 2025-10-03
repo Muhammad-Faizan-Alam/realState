@@ -24,11 +24,11 @@ const PropertyDetailSchema = new mongoose.Schema({
 
   propertyInfo: {
     type: { type: String },
-    purpose: String,
+    purpose: { type: String, default: "Sale" }, // Sale or Rent
     refNo: String,
     completion: String,
     furnishing: String,
-    truCheck: String,
+    truCheck: Boolean,
     avgRent: String,
     addedOn: String
   },

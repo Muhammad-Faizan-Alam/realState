@@ -11,6 +11,7 @@ import PropertyDetail from "./pages/PropertyDetail";
 import Villas from "./pages/Villas";
 import OtherProperties from "./pages/OtherProperties";
 import AgencyDashboard from "./pages/AgencyDashboard";
+import AdminDashboard from "./pages/AdminDashboard";
 import Auth from './pages/Auth'
 import NotFound from "./pages/NotFound";
 
@@ -70,6 +71,7 @@ const App = () => (
 
           {/* Dashboards */}
           <Route path="/agency/dashboard" element={<AgencyDashboard />} />
+          <Route path="/admin/dashboard" element={<AdminDashboard />} />
 
           {/* Auth */}
           <Route path="/auth" element={<Auth />} />

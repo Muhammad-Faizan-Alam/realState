@@ -26,7 +26,7 @@ const AddPropertyForm = () => {
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
   const [user, setUser] = useState(null);
-  
+
   // Form state matching the exact schema structure
   const [formData, setFormData] = useState({
     // Basic fields
@@ -57,7 +57,7 @@ const AddPropertyForm = () => {
       refNo: "",
       completion: "",
       furnishing: "",
-      // truCheck: "",
+      truCheck: false,
       avgRent: "",
       // addedOn: ""
     },
@@ -111,10 +111,11 @@ const AddPropertyForm = () => {
   useEffect(() => {
     const fetchProfile = async () => {
       try {
-        const res = await fetch("http://localhost:5000/api/auth/profile", { 
-          credentials: "include" 
+        const res = await fetch(`${import.meta.env.VITE_API_URL}/auth/profile`, {
+          credentials: "include"
         });
         const data = await res.json();
+        console.log("Fetched user profile:", data);
         if (data?._id) {
           setUser(data);
           setFormData(prev => ({
@@ -246,7 +247,7 @@ const AddPropertyForm = () => {
           refNo: formData.propertyInfo.refNo,
           completion: formData.propertyInfo.completion,
           furnishing: formData.propertyInfo.furnishing,
-          // truCheck: formData.propertyInfo.truCheck,
+          truCheck: formData.propertyInfo.truCheck,
           avgRent: formData.propertyInfo.avgRent,
           // addedOn: formData.propertyInfo.addedOn
         },
@@ -291,7 +292,7 @@ const AddPropertyForm = () => {
 
       console.log("Submitting payload:", payload); // For debugging
 
-      const response = await fetch("http://localhost:5000/api/properties", {
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/properties`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -344,7 +345,7 @@ const AddPropertyForm = () => {
         refNo: "",
         completion: "",
         furnishing: "",
-        // truCheck: "",
+        truCheck: false,
         avgRent: "",
         // addedOn: ""
       },
@@ -392,6 +393,11 @@ const AddPropertyForm = () => {
   return (
     <div>
       <Header />
+      {user && (
+        <div className="bg-gray-100 p-4 text-center text-sm text-gray-700">
+          Logged in as <span className="font-semibold">{user.name}</span> ({user.email})
+        </div>
+      )}
       <div className="p-6">
         <Dialog open={open} onOpenChange={setOpen}>
           <DialogTrigger asChild>
@@ -420,52 +426,52 @@ const AddPropertyForm = () => {
 
                 {/* Basic Info */}
                 <TabsContent value="basic" className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <Input 
-                    placeholder="Property Title *" 
+                  <Input
+                    placeholder="Property Title *"
                     value={formData.title}
                     onChange={(e) => handleBasicChange("title", e.target.value)}
                     required
                   />
-                  <Input 
-                    placeholder="Location *" 
+                  <Input
+                    placeholder="Location *"
                     value={formData.location}
                     onChange={(e) => handleBasicChange("location", e.target.value)}
                     required
                   />
-                  <Input 
-                    placeholder="Price *" 
+                  <Input
+                    placeholder="Price *"
                     value={formData.price}
                     onChange={(e) => handleBasicChange("price", e.target.value)}
                     type="number"
                     min="100"
                     required
                   />
-                  <Input 
-                    placeholder="Beds *" 
+                  <Input
+                    placeholder="Beds *"
                     type="number"
                     min="0"
                     value={formData.beds}
                     onChange={(e) => handleBasicChange("beds", e.target.value)}
                     required
                   />
-                  <Input 
-                    placeholder="Baths *" 
+                  <Input
+                    placeholder="Baths *"
                     type="number"
                     min="0"
                     value={formData.baths}
                     onChange={(e) => handleBasicChange("baths", e.target.value)}
                     required
                   />
-                  <Input 
-                    placeholder="Area in Square Feet *" 
+                  <Input
+                    placeholder="Area in Square Feet *"
                     type="number"
                     min="100"
                     value={formData.sqft}
                     onChange={(e) => handleBasicChange("sqft", e.target.value)}
                     required
                   />
-                  <Select 
-                    value={formData.propertyType} 
+                  <Select
+                    value={formData.propertyType}
                     onValueChange={(value) => handleBasicChange("propertyType", value)}
                   >
                     <SelectTrigger><SelectValue placeholder="Property Type" /></SelectTrigger>
@@ -476,19 +482,19 @@ const AddPropertyForm = () => {
                       <SelectItem value="Other">Other</SelectItem>
                     </SelectContent>
                   </Select>
-                  <Input 
-                    placeholder="State" 
+                  <Input
+                    placeholder="State"
                     value={formData.state}
                     onChange={(e) => handleBasicChange("state", e.target.value)}
                   />
-                  <Textarea 
-                    placeholder="Description" 
+                  <Textarea
+                    placeholder="Description"
                     className="md:col-span-2"
                     value={formData.description}
                     onChange={(e) => handleBasicChange("description", e.target.value)}
                   />
-                  <Select 
-                    value={formData.developer} 
+                  <Select
+                    value={formData.developer}
                     onValueChange={(value) => handleBasicChange("developer", value)}
                   >
                     <SelectTrigger><SelectValue placeholder="Developer" /></SelectTrigger>
@@ -508,23 +514,23 @@ const AddPropertyForm = () => {
                     />
                     <Label htmlFor="isOffPlan">Off Plan Property</Label>
                   </div>
-                  <Input 
-                    placeholder="Payment Plan" 
+                  <Input
+                    placeholder="Payment Plan"
                     value={formData.paymentPlan}
                     onChange={(e) => handleBasicChange("paymentPlan", e.target.value)}
                   />
-                  <Input 
-                    placeholder="WhatsApp Link" 
+                  <Input
+                    placeholder="WhatsApp Link"
                     value={formData.whatsappLink}
                     onChange={(e) => handleBasicChange("whatsappLink", e.target.value)}
                   />
-                  <Input 
-                    placeholder="Email Link" 
+                  <Input
+                    placeholder="Email Link"
                     value={formData.emailLink}
                     onChange={(e) => handleBasicChange("emailLink", e.target.value)}
                   />
-                  <Input 
-                    placeholder="Reference Number" 
+                  <Input
+                    placeholder="Reference Number"
                     value={formData.refNumber}
                     onChange={(e) => handleBasicChange("refNumber", e.target.value)}
                   />
@@ -541,8 +547,8 @@ const AddPropertyForm = () => {
 
                   {/* Tags */}
                   <div className="md:col-span-2">
-                    <Input 
-                      placeholder="Press Enter to add tags" 
+                    <Input
+                      placeholder="Press Enter to add tags"
                       onKeyDown={(e) => addTag(e, "tags", formData.tags)}
                     />
                     <div className="flex gap-2 flex-wrap mt-2">
@@ -560,9 +566,9 @@ const AddPropertyForm = () => {
                     value={formData.propertyInfo.type}
                     onChange={(e) => handleNestedChange("propertyInfo", "type", e.target.value)}
                   /> */}
-                  <Select 
+                  <Select
                     value={formData.propertyInfo.type}
-                    onChange={(e) => handleNestedChange("propertyInfo", "type", e.target.value)}
+                    onValueChange={(value) => handleNestedChange("propertyInfo", "type", value)}
                   >
                     <SelectTrigger><SelectValue placeholder="Property Type" /></SelectTrigger>
                     <SelectContent>
@@ -577,38 +583,38 @@ const AddPropertyForm = () => {
                     value={formData.propertyInfo.purpose}
                     onChange={(e) => handleNestedChange("propertyInfo", "purpose", e.target.value)}
                   /> */}
-                  <Select 
+                  <Select
                     value={formData.propertyInfo.purpose}
-                    onChange={(e) => handleNestedChange("propertyInfo", "purpose", e.target.value)}
+                    onValueChange={(value) => handleNestedChange("propertyInfo", "purpose", value)}
                   >
                     <SelectTrigger><SelectValue placeholder="Purpose" /></SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="For Sale">For Sale</SelectItem>
-                      <SelectItem value="For Rent">For Rent</SelectItem>
+                      <SelectItem value="Sale">For Sale</SelectItem>
+                      <SelectItem value="Rent">For Rent</SelectItem>
                     </SelectContent>
                   </Select>
-                  <Input 
-                    placeholder="Ref No" 
+                  <Input
+                    placeholder="Ref No"
                     value={formData.propertyInfo.refNo}
                     onChange={(e) => handleNestedChange("propertyInfo", "refNo", e.target.value)}
                   />
-                  <Input 
-                    placeholder="Completion" 
+                  <Input
+                    placeholder="Completion"
                     value={formData.propertyInfo.completion}
                     onChange={(e) => handleNestedChange("propertyInfo", "completion", e.target.value)}
                   />
-                  <Input 
-                    placeholder="Furnishing" 
+                  <Input
+                    placeholder="Furnishing"
                     value={formData.propertyInfo.furnishing}
                     onChange={(e) => handleNestedChange("propertyInfo", "furnishing", e.target.value)}
                   />
-                  {/* <Input 
+                  <Input className="hidden"
                     placeholder="TruCheck" 
                     value={formData.propertyInfo.truCheck}
                     onChange={(e) => handleNestedChange("propertyInfo", "truCheck", e.target.value)}
-                  /> */}
-                  <Input 
-                    placeholder="Average Rent" 
+                  />
+                  <Input
+                    placeholder="Average Rent"
                     value={formData.propertyInfo.avgRent}
                     onChange={(e) => handleNestedChange("propertyInfo", "avgRent", e.target.value)}
                   />
@@ -622,18 +628,18 @@ const AddPropertyForm = () => {
 
                 {/* Building Info */}
                 <TabsContent value="building" className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <Input 
-                    placeholder="Building Name or Title" 
+                  <Input
+                    placeholder="Building Name or Title"
                     value={formData.buildingInfo.name}
                     onChange={(e) => handleNestedChange("buildingInfo", "name", e.target.value)}
                   />
-                  <Input 
-                    placeholder="Year Built" 
+                  <Input
+                    placeholder="Year Built"
                     value={formData.buildingInfo.year}
                     onChange={(e) => handleNestedChange("buildingInfo", "year", e.target.value)}
                   />
-                  <Input 
-                    placeholder="Total Floors" 
+                  <Input
+                    placeholder="Total Floors"
                     value={formData.buildingInfo.floors}
                     onChange={(e) => handleNestedChange("buildingInfo", "floors", e.target.value)}
                   />
@@ -642,23 +648,23 @@ const AddPropertyForm = () => {
                     value={formData.buildingInfo.retailCentres}
                     onChange={(e) => handleNestedChange("buildingInfo", "retailCentres", e.target.value)}
                   /> */}
-                  <Input 
-                    placeholder="Pools" 
+                  <Input
+                    placeholder="Pools"
                     value={formData.buildingInfo.pools}
                     onChange={(e) => handleNestedChange("buildingInfo", "pools", e.target.value)}
                   />
-                  <Input 
-                    placeholder="Parking" 
+                  <Input
+                    placeholder="Parking"
                     value={formData.buildingInfo.parking}
                     onChange={(e) => handleNestedChange("buildingInfo", "parking", e.target.value)}
                   />
-                  <Input 
-                    placeholder="Area (Street Address or Locality)" 
+                  <Input
+                    placeholder="Area (Street Address or Locality)"
                     value={formData.buildingInfo.area}
                     onChange={(e) => handleNestedChange("buildingInfo", "area", e.target.value)}
                   />
-                  <Input 
-                    placeholder="Elevators" 
+                  <Input
+                    placeholder="Elevators"
                     value={formData.buildingInfo.elevators}
                     onChange={(e) => handleNestedChange("buildingInfo", "elevators", e.target.value)}
                   />
@@ -666,8 +672,8 @@ const AddPropertyForm = () => {
 
                 {/* Validated Info */}
                 <TabsContent value="validated" className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <Select 
-                    value={formData.validatedInfo.developer} 
+                  <Select
+                    value={formData.validatedInfo.developer}
                     onValueChange={(value) => handleNestedChange("validatedInfo", "developer", value)}
                   >
                     <SelectTrigger><SelectValue placeholder="Developer" /></SelectTrigger>
@@ -677,23 +683,23 @@ const AddPropertyForm = () => {
                       ))}
                     </SelectContent>
                   </Select>
-                  <Input 
-                    placeholder="Ownership" 
+                  <Input
+                    placeholder="Ownership"
                     value={formData.validatedInfo.ownership}
                     onChange={(e) => handleNestedChange("validatedInfo", "ownership", e.target.value)}
                   />
-                  <Input 
-                    placeholder="Build Up Area (sqft)" 
+                  <Input
+                    placeholder="Build Up Area (sqft)"
                     value={formData.validatedInfo.buildUpArea}
                     onChange={(e) => handleNestedChange("validatedInfo", "buildUpArea", e.target.value)}
                   />
-                  <Input 
-                    placeholder="Usage" 
+                  <Input
+                    placeholder="Usage"
                     value={formData.validatedInfo.usage}
                     onChange={(e) => handleNestedChange("validatedInfo", "usage", e.target.value)}
                   />
-                  <Input 
-                    placeholder="Parking" 
+                  <Input
+                    placeholder="Parking"
                     value={formData.validatedInfo.parking}
                     onChange={(e) => handleNestedChange("validatedInfo", "parking", e.target.value)}
                   />
@@ -701,33 +707,33 @@ const AddPropertyForm = () => {
 
                 {/* Regulatory Info */}
                 <TabsContent value="regulatory" className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <Input 
-                    placeholder="Permit No" 
+                  <Input
+                    placeholder="Permit No"
                     value={formData.regulatoryInfo.permitNo}
                     onChange={(e) => handleNestedChange("regulatoryInfo", "permitNo", e.target.value)}
                   />
-                  <Input 
-                    placeholder="Zone" 
+                  <Input
+                    placeholder="Zone"
                     value={formData.regulatoryInfo.zone}
                     onChange={(e) => handleNestedChange("regulatoryInfo", "zone", e.target.value)}
                   />
-                  <Input 
-                    value={user ? user.name : "Loading..."} 
-                    disabled 
-                    placeholder="Agency (auto-filled)" 
+                  <Input
+                    value={user ? user.name : "Loading..."}
+                    disabled
+                    placeholder="Agency (auto-filled)"
                   />
-                  <Input 
-                    placeholder="DED" 
+                  <Input
+                    placeholder="DED"
                     value={formData.regulatoryInfo.ded}
                     onChange={(e) => handleNestedChange("regulatoryInfo", "ded", e.target.value)}
                   />
-                  <Input 
-                    placeholder="RERA" 
+                  <Input
+                    placeholder="RERA"
                     value={formData.regulatoryInfo.rera}
                     onChange={(e) => handleNestedChange("regulatoryInfo", "rera", e.target.value)}
                   />
-                  <Input 
-                    placeholder="BRN" 
+                  <Input
+                    placeholder="BRN"
                     value={formData.regulatoryInfo.brn}
                     onChange={(e) => handleNestedChange("regulatoryInfo", "brn", e.target.value)}
                   />
@@ -738,8 +744,8 @@ const AddPropertyForm = () => {
                   {/* Amenities */}
                   <div>
                     <Label>Amenities</Label>
-                    <Input 
-                      placeholder="Press Enter to add amenities like Gym, Pool, etc." 
+                    <Input
+                      placeholder="Press Enter to add amenities like Gym, Pool, etc."
                       onKeyDown={(e) => addTag(e, "amenities", formData.amenities)}
                     />
                     <div className="flex gap-2 flex-wrap mt-2">
@@ -793,10 +799,10 @@ const AddPropertyForm = () => {
                   {/* Media Upload */}
                   <div>
                     <Label>Images</Label>
-                    <Input 
-                      type="file" 
-                      multiple 
-                      accept="image/*" 
+                    <Input
+                      type="file"
+                      multiple
+                      accept="image/*"
                       onChange={(e) => handleFileUpload(e, "image")}
                     />
                     <div className="grid grid-cols-3 gap-2 mt-2">
@@ -807,10 +813,10 @@ const AddPropertyForm = () => {
                   </div>
                   <div>
                     <Label>Videos</Label>
-                    <Input 
-                      type="file" 
-                      multiple 
-                      accept="video/*" 
+                    <Input
+                      type="file"
+                      multiple
+                      accept="video/*"
                       onChange={(e) => handleFileUpload(e, "video")}
                     />
                     <ul className="list-disc pl-5 mt-2 text-sm">
@@ -822,15 +828,15 @@ const AddPropertyForm = () => {
 
                   {/* Coordinates */}
                   <div className="grid grid-cols-2 gap-4">
-                    <Input 
-                      type="number" 
-                      placeholder="Latitude" 
+                    <Input
+                      type="number"
+                      placeholder="Latitude"
                       value={formData.coordinates.lat}
                       onChange={(e) => handleNestedChange("coordinates", "lat", e.target.value)}
                     />
-                    <Input 
-                      type="number" 
-                      placeholder="Longitude" 
+                    <Input
+                      type="number"
+                      placeholder="Longitude"
                       value={formData.coordinates.lng}
                       onChange={(e) => handleNestedChange("coordinates", "lng", e.target.value)}
                     />
@@ -840,14 +846,14 @@ const AddPropertyForm = () => {
 
               {/* Footer Buttons */}
               <div className="flex justify-end gap-4 mt-6">
-                <Button 
-                  variant="outline" 
-                  onClick={() => setOpen(false)} 
+                <Button
+                  variant="outline"
+                  onClick={() => setOpen(false)}
                   type="button"
                 >
                   Cancel
                 </Button>
-                <Button 
+                <Button
                   className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-xl"
                   type="submit"
                   disabled={loading}

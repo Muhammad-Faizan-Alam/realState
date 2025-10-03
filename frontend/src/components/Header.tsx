@@ -45,7 +45,7 @@ const Header = () => {
       submenu: [
         { label: "Agent Portal", href: "#" },
         { label: "Agency Portal", href: "/agency/dashboard" },
-        { label: "Admin Portal", href: "#" },
+        { label: "Admin Portal", href: "/admin/dashboard" },
       ]
     },
     {
@@ -62,7 +62,7 @@ const Header = () => {
   useEffect(() => {
     const getProfile = async () => {
       try {
-        const res = await fetch("http://localhost:5000/api/auth/profile", {
+        const res = await fetch(`${import.meta.env.VITE_API_URL}/auth/profile`, {
           method: "GET",
           credentials: "include", // ✅ cookie sent automatically
         });
