@@ -38,12 +38,13 @@ const PopularSearches = () => {
     (p) => p.propertyType?.toLowerCase() === "apartment"
   );
   const villas = properties.filter(
-    (p) => p.propertyType?.toLowerCase() === "villas"
+    (p) => p.propertyType?.toLowerCase() === "villas" || p.propertyType?.toLowerCase() === "villa"
   );
   const others = properties.filter(
     (p) =>
       p.propertyType?.toLowerCase() !== "apartment" &&
-      p.propertyType?.toLowerCase() !== "villas"
+      p.propertyType?.toLowerCase() !== "villas" &&
+      p.propertyType?.toLowerCase() !== "villa"
   );
 
   // 👇 Unique combinations extract karne ka function

@@ -8,5 +8,6 @@ router.get("/:id", propertyDetailController.getPropertyById);
 router.post("/", propertyDetailController.createProperty);
 router.put("/:id", propertyDetailController.updateProperty);
 router.delete("/:id", propertyDetailController.deleteProperty);
+router.patch("/verify/:id", propertyDetailController.verifyProperty);
 
 module.exports = router;

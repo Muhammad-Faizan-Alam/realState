@@ -57,3 +57,17 @@ exports.deleteProperty = async (req, res) => {
     res.status(500).json({ message: err.message });
   }
 };
+
+
+// verify or unverify truCheck status
+exports.verifyProperty = async (req, res) => {
+  try {
+    const property = await PropertyDetail.findById(req.params.id);
+    if (!property) return res.status(404).json({ message: "Property not found" });
+    property.propertyInfo.truCheck = !property.propertyInfo.truCheck;
+    await property.save();
+    res.json(property);
+  } catch (err) {
+    res.status(400).json({ message: err.message });
+  }
+};

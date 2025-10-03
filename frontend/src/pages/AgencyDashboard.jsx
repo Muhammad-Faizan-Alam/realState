@@ -477,7 +477,7 @@ const AddPropertyForm = () => {
                     <SelectTrigger><SelectValue placeholder="Property Type" /></SelectTrigger>
                     <SelectContent>
                       <SelectItem value="Apartment">Apartment</SelectItem>
-                      <SelectItem value="Villa">Villa</SelectItem>
+                      <SelectItem value="Villas">Villas</SelectItem>
                       <SelectItem value="Townhouse">Townhouse</SelectItem>
                       <SelectItem value="Other">Other</SelectItem>
                     </SelectContent>
@@ -573,7 +573,7 @@ const AddPropertyForm = () => {
                     <SelectTrigger><SelectValue placeholder="Property Type" /></SelectTrigger>
                     <SelectContent>
                       <SelectItem value="Apartment">Apartment</SelectItem>
-                      <SelectItem value="Villa">Villa</SelectItem>
+                      <SelectItem value="Villas">Villas</SelectItem>
                       <SelectItem value="Townhouse">Townhouse</SelectItem>
                       <SelectItem value="Other">Other</SelectItem>
                     </SelectContent>
